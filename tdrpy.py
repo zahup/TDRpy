@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 #Set two column (TVDSRD, TWT) inputfile
 
 tdr_file="C:\\users\\zahuc\documents\python scripts\TDR\\TDR_algyo-dk1_TVDSRD_TWT.prn"
-ref_tdr_file="C:\\users\\zahuc\documents\python scripts\TDR\\TDR_algyo-dk1_TVDSRD_TWT.prn"
 velo_file="C:\\users\\zahuc\Documents\python scripts\VELO\\TDR_algyo-dk1_velo.prn"
 well_name="Algyo-DK-1"
 
@@ -27,27 +26,12 @@ for i in range(1,len(twt)):
 
 vavg[0]=vavg[1]
 
-#Calculate refrence average velocity
-ref_vavg=np.zeros(len(ref_tvdsrd))
-for i in range(1,len(ref_twt)):
-    ref_vavg[i] = ref_tvdsrd[i] / (ref_twt[i]/2000)
-
-ref_vavg[0]=ref_vavg[1]
-
-
 #Calculate interval Velocity
 vint=np.zeros(len(twt))
 for i in range (1, len(twt)):
     vint[i]=(tvdsrd[i]-tvdsrd[i-1])/((twt[i]-twt[i-1])/2000)
 
 vint[0]=vint[1]
-
-#Calculate rererence interval Velocity
-ref_vint=np.zeros(len(ref_twt))
-for i in range (1, len(ref_twt)):
-    ref_vint[i]=(ref_tvdsrd[i]-ref_tvdsrd[i-1])/((ref_twt[i]-ref_twt[i-1])/2000)
-
-ref_vint[0]=ref_vint[1]
 
 #Calculate RMS velocity
 vrms=np.zeros(len(vint))
@@ -59,18 +43,6 @@ for i in range (1, len(vint)):
     dt[i]=((twt[i]-twt[i-1])/2000)
     summ[i]=summ[i-1] + dt[i]*vint[i]*vint[i]
     vrms[i]=np.sqrt(summ[i]/(twt[i]/2000))
-
-#Calculate reference RMS velocity
-ref_vrms=np.zeros(len(ref_vint))
-ref_summ=np.zeros(len(ref_vint))
-ref_dt=np.ones(len(ref_vint))
-ref_vrms[0]=ref_vint[1]
-
-for i in range (1, len(ref_vint)):
-    ref_dt[i]=((ref_twt[i]-ref_twt[i-1])/2000)
-    ref_summ[i]=ref_summ[i-1] + ref_dt[i]*ref_vint[i]*ref_vint[i]
-    ref_vrms[i]=np.sqrt(ref_summ[i]/(ref_twt[i]/2000))
-
 
 #Export Velocities to textfile
 hheader='TVDSRD,TWT,VAVG,VINT,VRMS'
